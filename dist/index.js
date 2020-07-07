@@ -869,6 +869,7 @@ module.exports = (function(e, t) {
       if (r.length == 0) return;
       try {
         const e = Object.keys(t.data.files)[0];
+        console.log("filename", e);
         await c.gists.update({
           gist_id: o,
           files: {
