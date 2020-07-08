@@ -4200,17 +4200,13 @@ module.exports = (function(e, t) {
       if (r.length == 0) return;
       try {
         const e = Object.keys(t.data.files)[0];
-        await c.gists.update({
+        const n = `📊 Weekly development breakdown`;
+        await c.gists.createComment({
           gist_id: o,
-          files: {
-            [e]: {
-              filename: `📊 Weekly development breakdown`,
-              content: r.join("\n")
-            }
-          }
+          body: `${n}\n${r.join("\n")}`
         });
       } catch (e) {
-        console.error(`Unable to update gist\n${e}`);
+        console.error(`Unable to comment gist\n${e}`);
       }
     }
     function generateBarChart(e, t) {
