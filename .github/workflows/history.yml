@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Update gist for history
-        run: node history.js
+        uses: ./history-action
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GIST_ID: 645a83cff2b6dcdc5ae956075e5cd22e

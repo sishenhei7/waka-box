@@ -12,7 +12,7 @@ module.exports = (function(e, t) {
   }
   __webpack_require__.ab = __dirname + "/";
   function startup() {
-    return __webpack_require__(404);
+    return __webpack_require__(104);
   }
   return startup();
 })({
@@ -836,6 +836,68 @@ module.exports = (function(e, t) {
   87: function(e) {
     e.exports = require("os");
   },
+  104: function(e, t, r) {
+    r(63).config();
+    const { WakaTimeClient: n, RANGE: i } = r(650);
+    const s = r(0);
+    const { GIST_ID: o, GH_TOKEN: a, WAKATIME_API_KEY: u } = process.env;
+    const p = new n(u);
+    const c = new s({ auth: `token ${a}` });
+    async function main() {
+      const e = await p.getMyStats({ range: i.LAST_7_DAYS });
+      await updateGist(e);
+    }
+    async function updateGist(e) {
+      let t;
+      try {
+        t = await c.gists.get({ gist_id: o });
+      } catch (e) {
+        console.error(`Unable to get gist\n${e}`);
+      }
+      const r = [];
+      for (let t = 0; t < Math.min(e.data.languages.length, 5); t++) {
+        const n = e.data.languages[t];
+        const { name: i, percent: s, text: o } = n;
+        const a = [
+          i.padEnd(11),
+          o.padEnd(14),
+          generateBarChart(s, 21),
+          String(s.toFixed(1)).padStart(5) + "%"
+        ];
+        r.push(a.join(" "));
+      }
+      if (r.length == 0) return;
+      try {
+        const e = Object.keys(t.data.files)[0];
+        await c.gists.update({
+          gist_id: o,
+          files: {
+            [e]: {
+              filename: `📊 Weekly development breakdown`,
+              content: r.join("\n")
+            }
+          }
+        });
+      } catch (e) {
+        console.error(`Unable to update gist\n${e}`);
+      }
+    }
+    function generateBarChart(e, t) {
+      const r = "░▏▎▍▌▋▊▉█";
+      const n = Math.floor((t * 8 * e) / 100);
+      const i = Math.floor(n / 8);
+      if (i >= t) {
+        return r.substring(8, 9).repeat(t);
+      }
+      const s = n % 8;
+      return [r.substring(8, 9).repeat(i), r.substring(s, s + 1)]
+        .join("")
+        .padEnd(t, r.substring(0, 1));
+    }
+    (async () => {
+      await main();
+    })();
+  },
   118: function(e, t, r) {
     "use strict";
     const n = r(87);
@@ -1465,7 +1527,7 @@ module.exports = (function(e, t) {
   215: function(e) {
     e.exports = {
       _args: [
-        ["@octokit/rest@16.36.0", "/Users/yangzhou/Documents/个人项目/waka-box"]
+        ["@octokit/rest@16.36.0", "/Users/zhouyang/Documents/projects/waka-box"]
       ],
       _from: "@octokit/rest@16.36.0",
       _id: "@octokit/rest@16.36.0",
@@ -1488,7 +1550,7 @@ module.exports = (function(e, t) {
       _requiredBy: ["/"],
       _resolved: "https://registry.npmjs.org/@octokit/rest/-/rest-16.36.0.tgz",
       _spec: "16.36.0",
-      _where: "/Users/yangzhou/Documents/个人项目/waka-box",
+      _where: "/Users/zhouyang/Documents/projects/waka-box",
       author: { name: "Gregor Martynus", url: "https://github.com/gr2m" },
       bugs: { url: "https://github.com/octokit/rest.js/issues" },
       bundlesize: [{ path: "./dist/octokit-rest.min.js.gz", maxSize: "33 kB" }],
@@ -3615,7 +3677,7 @@ module.exports = (function(e, t) {
   },
   361: function(e) {
     e.exports = {
-      _args: [["axios@0.19.0", "/Users/yangzhou/Documents/个人项目/waka-box"]],
+      _args: [["axios@0.19.0", "/Users/zhouyang/Documents/projects/waka-box"]],
       _from: "axios@0.19.0",
       _id: "axios@0.19.0",
       _inBundle: false,
@@ -3636,7 +3698,7 @@ module.exports = (function(e, t) {
       _requiredBy: ["/"],
       _resolved: "https://registry.npmjs.org/axios/-/axios-0.19.0.tgz",
       _spec: "0.19.0",
-      _where: "/Users/yangzhou/Documents/个人项目/waka-box",
+      _where: "/Users/zhouyang/Documents/projects/waka-box",
       author: { name: "Matt Zabriskie" },
       browser: { "./lib/adapters/http.js": "./lib/adapters/xhr.js" },
       bugs: { url: "https://github.com/axios/axios/issues" },
@@ -4166,68 +4228,6 @@ module.exports = (function(e, t) {
       e.forEach(e => e(a, t));
       return a;
     }
-  },
-  404: function(e, t, r) {
-    r(63).config();
-    const { WakaTimeClient: n, RANGE: i } = r(650);
-    const s = r(0);
-    const { GIST_ID: o, GH_TOKEN: a, WAKATIME_API_KEY: u } = process.env;
-    const p = new n(u);
-    const c = new s({ auth: `token ${a}` });
-    async function main() {
-      const e = await p.getMyStats({ range: i.LAST_7_DAYS });
-      await updateGist(e);
-    }
-    async function updateGist(e) {
-      let t;
-      try {
-        t = await c.gists.get({ gist_id: o });
-      } catch (e) {
-        console.error(`Unable to get gist\n${e}`);
-      }
-      const r = [];
-      for (let t = 0; t < Math.min(e.data.languages.length, 5); t++) {
-        const n = e.data.languages[t];
-        const { name: i, percent: s, text: o } = n;
-        const a = [
-          i.padEnd(11),
-          o.padEnd(14),
-          generateBarChart(s, 21),
-          String(s.toFixed(1)).padStart(5) + "%"
-        ];
-        r.push(a.join(" "));
-      }
-      if (r.length == 0) return;
-      try {
-        const e = Object.keys(t.data.files)[0];
-        await c.gists.update({
-          gist_id: o,
-          files: {
-            [e]: {
-              filename: `📊 Weekly development breakdown`,
-              content: r.join("\n")
-            }
-          }
-        });
-      } catch (e) {
-        console.error(`Unable to update gist\n${e}`);
-      }
-    }
-    function generateBarChart(e, t) {
-      const r = "░▏▎▍▌▋▊▉█";
-      const n = Math.floor((t * 8 * e) / 100);
-      const i = Math.floor(n / 8);
-      if (i >= t) {
-        return r.substring(8, 9).repeat(t);
-      }
-      const s = n % 8;
-      return [r.substring(8, 9).repeat(i), r.substring(s, s + 1)]
-        .join("")
-        .padEnd(t, r.substring(0, 1));
-    }
-    (async () => {
-      await main();
-    })();
   },
   411: function(e, t, r) {
     "use strict";
