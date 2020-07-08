@@ -3,13 +3,12 @@ on:
   schedule:
     - cron: "*/10 * * * *"
 jobs:
-  update-gist:
+  update-gist-for-history:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
       - name: Update gist for history
-        uses: sishenhei7/waka-box@master
-      - run: node history/index.js
+        run: node history/index.js
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GIST_ID: 645a83cff2b6dcdc5ae956075e5cd22e
